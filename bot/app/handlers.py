@@ -7,7 +7,8 @@ from .messages import (START_MESSAGE,
                        HELP_MESSAGE,
                        USER_EXIT_MESSAGE,
                        ASK_FULL_NAME_IN_REGISTRATION_MESSAGE,
-                       ASK_PHONE_NUMBER_IN_REGISTRATION_MESSAGE
+                       ASK_PHONE_NUMBER_IN_REGISTRATION_MESSAGE,
+                       SEND_TASK_MESSAGE,
                        )
 
 
@@ -28,10 +29,10 @@ async def register_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     if command:
         full_name = context.user_data.get('full_name')
         phone_number = context.user_data.get('phone_number')
-        if not full_name and not phone_number:
+        if not full_name:
             context.user_data['full_name'] = update.message.text
             await context.bot.send_message(chat_id=chat_id, text=ASK_PHONE_NUMBER_IN_REGISTRATION_MESSAGE)
-        elif full_name and not phone_number:
+        elif not phone_number:
             context.user_data['phone_number'] = update.message.text
             # connect to database
             await context.bot.send_message(chat_id=chat_id, text=SUCCESS_REGISTRATION_MESSAGE)
@@ -68,16 +69,46 @@ async def exit_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     user_id = update.effective_user.id
     # connect to database
     await context.bot.send_message(chat_id=chat_id, text=USER_EXIT_MESSAGE)
+    
+    
+async def task_handler(update: Update, context:ContextTypes.DEFAULT_TYPE) -> None:
+    chat_id = update.effective_chat.id
+    command = context.user_data.get('command')
+    if command:
+        task = context.user_data.get('task')
+        heart = context.user_data.get('heart')
+        required_answer = context.user_data.get('required_answer')
+        if not task:
+            context.user_data['task'] = update.message
+            await context.bot.send_message(chat_id=chat_id, text="لطفا تعداد قلب این پروژه را مشخص کنید دقت کنید که حتما یک عدد وارد کنید")
+        elif not heart:
+            try:
+                context.user_data['heart'] = int(update.message.text)
+                # connect to database get user hearts
+                await context.bot.send_message(chat_id=chat_id, text="لطفا تعداد نفرات این پروژه را مشخص کنید دقت کنید که حتما یک عدد وارد کنید")
+            except:
+                await context.bot.send_message(chat_id=chat_id, text="لطفا تعداد قلب این پروژه را مشخص کنید دقت کنید که حتما یک عدد وارد کنید")
+        elif not required_answer:
+            try:
+                context.user_data['required_answer'] = int(update.message.text)
+                # connect to database and add task
+                # connect to database and get user
+                await context.bot.send_message(chat_id=chat_id, text="تسک شما برای تمام یوزر ها ارسال شد")
+                context.user_data.clear()
+            except:
+                await context.bot.send_message(chat_id=chat_id, text="لطفا تعداد نفرات این پروژه را مشخص کنید دقت کنید که حتما یک عدد وارد کنید")
+    else:
+        context.user_data['command'] = 'task'
+        await context.bot.send_message(chat_id=chat_id, text=SEND_TASK_MESSAGE)
 
 
 async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    chat_id = update.effective_chat.id
     command = context.user_data.get('command')
     if command:
         if command == 'answer':
             pass
         elif command == 'task':
-            pass
+            await task_handler(update, context)
         elif command == 'register':
             await register_handler(update, context)
     else:

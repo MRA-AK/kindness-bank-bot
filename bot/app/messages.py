@@ -30,3 +30,5 @@ HELP_MESSAGE = """
 """
 
 USER_EXIT_MESSAGE = "اتمام تعامل شما با بانک مهربانی"
+
+SEND_TASK_MESSAGE = "تسک خود را ارسال کنید"

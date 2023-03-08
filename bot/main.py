@@ -6,6 +6,7 @@ from app.handlers import (start_handler,
                           profile_handler,
                           exit_handler,
                           message_handler,
+                          task_handler,
                           )
     
 
@@ -18,6 +19,7 @@ def main() -> None:
     application.add_handler(CommandHandler('help', help_handler))
     application.add_handler(CommandHandler('profile', profile_handler))
     application.add_handler(CommandHandler('exit', exit_handler))
+    application.add_handler(CommandHandler('task', task_handler))
     application.add_handler(MessageHandler(None, message_handler))
 
     application.run_polling()
