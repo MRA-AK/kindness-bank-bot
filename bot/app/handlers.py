@@ -41,7 +41,7 @@ async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 async def profile_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
-    give some information about bot to user
+    get user id from update and give user information
     """
     chat_id = update.effective_chat.id
     user_id = update.effective_user.id
@@ -51,4 +51,11 @@ async def profile_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
 
 async def exit_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    pass
+    """
+    get user id from update and delete it from database
+    """
+    chat_id = update.effective_chat.id
+    user_id = update.effective_user.id
+    # connect to database
+    message = 'اتمام تعامل بانک مهربانی با شما.'
+    await context.bot.send_message(chat_id=chat_id, text=message)
