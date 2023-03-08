@@ -30,7 +30,13 @@ async def register_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
 
 async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    pass
+    """
+    give some information about bot to user
+    """
+    chat_id = update.effective_chat.id
+    message = 'شما میتوانید از کامند های زیر استفاده کنید\n\n/start   ->   شروع فرآیند\n/register   ->   ثبت نام\n/help   ->   راهنمایی بیشتر\n/profile   ->   نمایش اطلاعات کامل شما\n/exit   ->   پایان دادن به فعالیت خود با بانک مهربانی'
+    await context.bot.send_message(chat_id=chat_id, text=message)
+    
 
 
 async def profile_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
