@@ -40,7 +40,14 @@ async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 
 async def profile_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    pass
+    """
+    give some information about bot to user
+    """
+    chat_id = update.effective_chat.id
+    user_id = update.effective_user.id
+    # connect to database
+    message = ''
+    await context.bot.send_message(chat_id=chat_id, text=message)
 
 
 async def exit_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
