@@ -1,6 +1,7 @@
 from telegram import Update
 from telegram.ext import ContextTypes
 from .tools import split_name_and_phone_number
+from .messages import START_MESSAGE, SUCCESS_REGISTRATION_MESSAGE, FAIL_REGISTRATION_MESSAGE, HELP_MESSAGE, USER_EXIT_MESSAGE
 
 
 async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -8,9 +9,7 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     send a message to user if send start command
     """
     chat_id = update.effective_chat.id
-    message = 'سلام به ربات بانک مهربانی خوش آمدید\n\nاگر تا به حال داخل ربات ثبت نام نکرده اید از کامند زیر برای ثبت نام استفاده کنید\n\n/register موبایل نام'
-
-    await context.bot.send_message(chat_id=chat_id, text=message)
+    await context.bot.send_message(chat_id=chat_id, text=START_MESSAGE)
 
 
 async def register_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -22,11 +21,11 @@ async def register_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     result = split_name_and_phone_number(text)
     try:
         full_name, phone_number = result[0], result[1]
-        message = 'ثبت نام شما با موفقیت انجام شد\n\nبرای راهنمایی بیشتر از کامند زیر استفاده کنید\n\n/help'
+        message = SUCCESS_REGISTRATION_MESSAGE
         # conect to data base
     except TypeError as err:
         # add logging
-        await context.bot.send_message(chat_id=chat_id, text='مشخصات شما ناقص است لطفا مجدد ارسال کنید')
+        await context.bot.send_message(chat_id=chat_id, text=FAIL_REGISTRATION_MESSAGE)
 
 
 async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -34,8 +33,7 @@ async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     give some information about bot to user
     """
     chat_id = update.effective_chat.id
-    message = 'شما میتوانید از کامند های زیر استفاده کنید\n\n/start   ->   شروع فرآیند\n/register   ->   ثبت نام\n/help   ->   راهنمایی بیشتر\n/profile   ->   نمایش اطلاعات کامل شما\n/exit   ->   پایان دادن به فعالیت خود با بانک مهربانی'
-    await context.bot.send_message(chat_id=chat_id, text=message)
+    await context.bot.send_message(chat_id=chat_id, text=HELP_MESSAGE)
     
 
 
@@ -57,5 +55,5 @@ async def exit_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     chat_id = update.effective_chat.id
     user_id = update.effective_user.id
     # connect to database
-    message = 'اتمام تعامل بانک مهربانی با شما.'
-    await context.bot.send_message(chat_id=chat_id, text=message)
+    
+    await context.bot.send_message(chat_id=chat_id, text=USER_EXIT_MESSAGE)
