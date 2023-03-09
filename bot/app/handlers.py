@@ -41,20 +41,21 @@ async def register_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         phone_number = context.user_data.get('phone_number')
         if not full_name:
             context.user_data['full_name'] = update.message.text
-            await context.bot.send_message(chat_id=chat_id, text=ASK_PHONE_NUMBER_IN_REGISTRATION_MESSAGE)
+            message = ASK_PHONE_NUMBER_IN_REGISTRATION_MESSAGE
         elif not phone_number:
             phone_number = update.message.text
             phone_number = find_phone_number_in_message(phone_number)
             if phone_number:
                 context.user_data['phone_number'] = phone_number
                 # connect to database
-                await context.bot.send_message(chat_id=chat_id, text=SUCCESS_REGISTRATION_MESSAGE)
+                message = SUCCESS_REGISTRATION_MESSAGE
                 context.user_data.clear()
             else:
-                await context.bot.send_message(chat_id=chat_id, text=ASK_PHONE_NUMBER_IN_REGISTRATION_MESSAGE)
+                message = ASK_PHONE_NUMBER_IN_REGISTRATION_MESSAGE
     else:
         context.user_data['command'] = 'register'
-        await context.bot.send_message(chat_id=chat_id, text=ASK_FULL_NAME_IN_REGISTRATION_MESSAGE)
+        message = ASK_FULL_NAME_IN_REGISTRATION_MESSAGE
+    await context.bot.send_message(chat_id=chat_id, text=message)
 
 
 async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -102,26 +103,27 @@ async def task_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         required_answer = context.user_data.get('required_answer')
         if not task:
             context.user_data['task'] = update.message
-            await context.bot.send_message(chat_id=chat_id, text=DEFINE_TASK_HAEART_MESSAGE)
+            message = DEFINE_TASK_HAEART_MESSAGE
         elif not heart:
             try:
                 context.user_data['heart'] = int(update.message.text)
                 # connect to database get user hearts
-                await context.bot.send_message(chat_id=chat_id, text=DEFINE_TASK_REQUIRED_ANSWER_MESSAGE)
+                message = DEFINE_TASK_REQUIRED_ANSWER_MESSAGE
             except:
-                await context.bot.send_message(chat_id=chat_id, text=DEFINE_TASK_HAEART_MESSAGE)
+                message = DEFINE_TASK_HAEART_MESSAGE
         elif not required_answer:
             try:
                 context.user_data['required_answer'] = int(update.message.text)
                 # connect to database and add task
                 # connect to database and get user
-                await context.bot.send_message(chat_id=chat_id, text=SEND_TASK_TO_ALL_USER_MESSAGE)
+                message = SEND_TASK_TO_ALL_USER_MESSAGE
                 context.user_data.clear()
             except:
-                await context.bot.send_message(chat_id=chat_id, text=DEFINE_TASK_REQUIRED_ANSWER_MESSAGE)
+                message = DEFINE_TASK_REQUIRED_ANSWER_MESSAGE
     else:
         context.user_data['command'] = 'task'
-        await context.bot.send_message(chat_id=chat_id, text=SEND_TASK_MESSAGE)
+        message = SEND_TASK_MESSAGE
+    await context.bot.send_message(chat_id=chat_id, text=message)
 
 
 async def answer_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -136,11 +138,12 @@ async def answer_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         context.user_data['answer'] = update.message
         inline_keyboard = inline_keyboard_button_for_get_confirmation()
         # connect to database and save answer
-        await context.bot.send_message(chat_id=chat_id, text=SEND_ANSWER_TO_TASK_OWNER_MESSAGE)
+        message = SEND_ANSWER_TO_TASK_OWNER_MESSAGE
     else:
         context.user_data['command'] = 'answer'
         # connect to database and get tasks to show to user
-        await context.bot.send_message(chat_id=chat_id, text=SEND_ANSWER_MESSAGE)
+        message = SEND_ANSWER_MESSAGE
+    await context.bot.send_message(chat_id=chat_id, text=message)
 
 
 async def get_confirmation_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
