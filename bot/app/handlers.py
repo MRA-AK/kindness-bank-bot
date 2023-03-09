@@ -14,6 +14,7 @@ from .messages import (START_MESSAGE,
                        REQUIRED_ANSWER_FOR_TASK_MESSAGE,
                        SEND_TASK_TO_ALL_USER_MESSAGE,
                        DEFINE_HEART_FOR_TASK_MESSAGE,
+                       REASON_OF_REJECT_MESSAGE
                        )
 
 
@@ -118,6 +119,16 @@ async def answer_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         context.user_data['command'] = 'answer'
         # connect to database and get tasks to show to user
         await context.bot.send_message(chat_id=chat_id, text=SEND_ANSWER_MESSAGE)
+        
+        
+async def get_confirmation_handler(update: Update, context:ContextTypes.DEFAULT_TYPE) -> None:
+    chat_id = update.effective_chat.id
+    data = update.callback_query.data
+    if data == 'accept':
+        # connect to database and do transaction
+        pass
+    else:
+        await context.bot.send_message(chat_id=chat_id, text=REASON_OF_REJECT_MESSAGE)
 
 
 async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

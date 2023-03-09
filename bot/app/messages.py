@@ -43,3 +43,5 @@ SEND_TASK_TO_ALL_USER_MESSAGE = "تسک شما برای تمام یوزر ها �
 SEND_ANSWER_MESSAGE = "جواب خود را ارسال کنید"
 SEND_ANSWER_TO_TASK_OWNER_MESSAGE = "جواب شما برای یوزر ارسال شد"
 
+# get confirmation
+REASON_OF_REJECT_MESSAGE = "دلیل رد کردن این جواب رو بنویسید"
