@@ -102,14 +102,26 @@ async def task_handler(update: Update, context:ContextTypes.DEFAULT_TYPE) -> Non
         await context.bot.send_message(chat_id=chat_id, text=SEND_TASK_MESSAGE)
 
 
+async def answer_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    chat_id = update.effective_chat.id
+    command = context.user_data.get('command')
+    if command:
+        context.user_data['answer'] = update.message
+        # connect to database and save answer
+        await context.bot.send_message(chat_id=chat_id, text="جواب شما برای یوزر ارسال شد")     
+    else:
+        context.user_data['command'] = 'answer'
+        # connect to database and get tasks to show to user
+        await context.bot.send_message(chat_id=chat_id, text="جواب خود را ارسال کنید")
+
+
 async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     command = context.user_data.get('command')
     if command:
         if command == 'answer':
-            pass
+            await answer_handler(update, context)
         elif command == 'task':
             await task_handler(update, context)
         elif command == 'register':
             await register_handler(update, context)
-    else:
-        pass
+            
