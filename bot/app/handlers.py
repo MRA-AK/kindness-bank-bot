@@ -19,7 +19,7 @@ from .tools import find_phone_number_in_message, inline_keyboard_button_for_get_
 
 async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
-    send a message to user if send start command
+    Start the bot process
     """
     chat_id = update.effective_chat.id
     await context.bot.send_message(chat_id=chat_id, text=START_MESSAGE)
@@ -27,7 +27,12 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
 async def register_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
-    get user information and register user
+    Registration of users in a process
+    In the first step, he enters /register and the robot sends him a message to get his name, 
+    then the user enters his name and the robot sends him a phone number request message. 
+    When the user enters the phone number, the number is validated, and if it is not accepted,
+    the user is asked to send the phone number again, and if the phone number is accepted, 
+    the user's information is stored in the database.
     """
     chat_id = update.effective_chat.id
     command = context.user_data.get('command')
@@ -50,19 +55,19 @@ async def register_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     else:
         context.user_data['command'] = 'register'
         await context.bot.send_message(chat_id=chat_id, text=ASK_FULL_NAME_IN_REGISTRATION_MESSAGE)
-    
+
 
 async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
-    give some information about bot to user
+    Getting information about how the robot works
     """
     chat_id = update.effective_chat.id
     await context.bot.send_message(chat_id=chat_id, text=HELP_MESSAGE)
-    
+
 
 async def profile_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
-    get user id from update and give user information
+    Display complete user information
     """
     chat_id = update.effective_chat.id
     user_id = update.effective_user.id
@@ -73,15 +78,22 @@ async def profile_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
 async def exit_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
-    get user id from update and delete it from database
+    Delete the user from the database
     """
     chat_id = update.effective_chat.id
     user_id = update.effective_user.id
     # connect to database
     await context.bot.send_message(chat_id=chat_id, text=USER_EXIT_MESSAGE)
-    
-    
-async def task_handler(update: Update, context:ContextTypes.DEFAULT_TYPE) -> None:
+
+
+async def task_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Getting the task from the user as a process
+    First, the user must enter /task. Then the robot sends a message to the user to receive the task.
+    After receiving the task, the robot asks the user for the cost of the task,
+    and after receiving the amount, it asks the user the number of people needed to complete the task, 
+    and then sends this task to all users.
+    """
     chat_id = update.effective_chat.id
     command = context.user_data.get('command')
     if command:
@@ -113,20 +125,28 @@ async def task_handler(update: Update, context:ContextTypes.DEFAULT_TYPE) -> Non
 
 
 async def answer_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Getting the answer to a task from the user in a process way
+    First, the user sends /answer. Then we ask the user to send a query.
+    Then we will send this answer to the task owner for confirmation.
+    """
     chat_id = update.effective_chat.id
     command = context.user_data.get('command')
     if command:
         context.user_data['answer'] = update.message
         inline_keyboard = inline_keyboard_button_for_get_confirmation()
         # connect to database and save answer
-        await context.bot.send_message(chat_id=chat_id, text=SEND_ANSWER_TO_TASK_OWNER_MESSAGE)     
+        await context.bot.send_message(chat_id=chat_id, text=SEND_ANSWER_TO_TASK_OWNER_MESSAGE)
     else:
         context.user_data['command'] = 'answer'
         # connect to database and get tasks to show to user
         await context.bot.send_message(chat_id=chat_id, text=SEND_ANSWER_MESSAGE)
-        
-        
-async def get_confirmation_handler(update: Update, context:ContextTypes.DEFAULT_TYPE) -> None:
+
+
+async def get_confirmation_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Getting the task owner's approval for the answers sent
+    """
     chat_id = update.effective_chat.id
     data = update.callback_query.data
     if data == 'accept':
@@ -137,6 +157,9 @@ async def get_confirmation_handler(update: Update, context:ContextTypes.DEFAULT_
 
 
 async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Handling incoming messages during the processes that the robot performs
+    """
     command = context.user_data.get('command')
     if command:
         if command == 'answer':
@@ -145,4 +168,3 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             await task_handler(update, context)
         elif command == 'register':
             await register_handler(update, context)
-            

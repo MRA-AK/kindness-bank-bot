@@ -12,6 +12,9 @@ from app.handlers import (start_handler,
     
 
 def main() -> None:
+    """
+    The ئain function is for defining handlers function 
+    """
     token = config('TOKEN')
     application = Application.builder().token(token).build()
 

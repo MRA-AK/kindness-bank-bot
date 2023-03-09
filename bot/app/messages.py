@@ -1,4 +1,4 @@
-# start
+# Start
 START_MESSAGE = """
 سلام به ربات بانک مهربانی خوش آمدید
 
@@ -7,7 +7,7 @@ START_MESSAGE = """
 /register
 """
 
-# registration
+# Registration
 SUCCESS_REGISTRATION_MESSAGE = """
 ثبت نام شما با موفقیت انجام شد
 
@@ -18,7 +18,7 @@ SUCCESS_REGISTRATION_MESSAGE = """
 ASK_FULL_NAME_IN_REGISTRATION_MESSAGE = "لطفا نام کامل خود را وارد کنید"
 ASK_PHONE_NUMBER_IN_REGISTRATION_MESSAGE = "لطفا شماره تلفن خود را وارد کنید"
 
-# help
+# Help
 HELP_MESSAGE = """
 شما میتوانید از کامند های زیر استفاده کنید
 
@@ -29,18 +29,18 @@ HELP_MESSAGE = """
 /exit          ->   پایان دادن به فعالیت خود با بانک مهربانی
 """
 
-# user exit
+# User exit
 USER_EXIT_MESSAGE = "اتمام تعامل شما با بانک مهربانی"
 
-# task
+# Task
 SEND_TASK_MESSAGE = "تسک خود را ارسال کنید"
 DEFINE_TASK_HAEART_MESSAGE = "لطفا تعداد قلب این پروژه را مشخص کنید دقت کنید که حتما یک عدد وارد کنید"
 DEFINE_TASK_REQUIRED_ANSWER_MESSAGE = "لطفا تعداد نفرات این پروژه را مشخص کنید دقت کنید که حتما یک عدد وارد کنید"
 SEND_TASK_TO_ALL_USER_MESSAGE = "تسک شما برای تمام یوزر ها ارسال شد"
 
-# answer
+# Answer
 SEND_ANSWER_MESSAGE = "جواب خود را ارسال کنید"
 SEND_ANSWER_TO_TASK_OWNER_MESSAGE = "جواب شما برای یوزر ارسال شد"
 
-# get confirmation
+# Get confirmation
 REASON_OF_REJECT_MESSAGE = "دلیل رد کردن این جواب رو بنویسید"
