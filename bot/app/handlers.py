@@ -1,6 +1,5 @@
 from telegram import Update
 from telegram.ext import ContextTypes
-from .tools import split_name_and_phone_number
 from .messages import (START_MESSAGE,
                        SUCCESS_REGISTRATION_MESSAGE,
                        FAIL_REGISTRATION_MESSAGE,
@@ -16,6 +15,7 @@ from .messages import (START_MESSAGE,
                        DEFINE_HEART_FOR_TASK_MESSAGE,
                        REASON_OF_REJECT_MESSAGE
                        )
+from .tools import split_name_and_phone_number, inline_keyboard_button_for_get_confirmation
 
 
 async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -113,6 +113,7 @@ async def answer_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     command = context.user_data.get('command')
     if command:
         context.user_data['answer'] = update.message
+        inline_keyboard = inline_keyboard_button_for_get_confirmation()
         # connect to database and save answer
         await context.bot.send_message(chat_id=chat_id, text=SEND_ANSWER_TO_TASK_OWNER_MESSAGE)     
     else:

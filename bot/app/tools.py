@@ -1,4 +1,5 @@
 import re
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 def split_name_and_phone_number(text: str) -> tuple or None:
@@ -21,3 +22,10 @@ def split_name_and_phone_number(text: str) -> tuple or None:
     if full_name:
         return (full_name, phone_number)
     return None
+
+
+def inline_keyboard_button_for_get_confirmation() -> list[list]:
+    mark_up = InlineKeyboardMarkup([
+        [InlineKeyboardButton('accept', callback_data='accept'), InlineKeyboardButton('reject', callback_data='reject')],
+    ])
+    return mark_up
