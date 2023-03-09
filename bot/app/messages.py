@@ -17,7 +17,6 @@ SUCCESS_REGISTRATION_MESSAGE = """
 """
 ASK_FULL_NAME_IN_REGISTRATION_MESSAGE = "لطفا نام کامل خود را وارد کنید"
 ASK_PHONE_NUMBER_IN_REGISTRATION_MESSAGE = "لطفا شماره تلفن خود را وارد کنید"
-FAIL_REGISTRATION_MESSAGE = "مشخصات شما ناقص است لطفا مجدد ارسال کنید"
 
 # help
 HELP_MESSAGE = """

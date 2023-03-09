@@ -10,12 +10,12 @@ from .messages import (START_MESSAGE,
                        SEND_TASK_MESSAGE,
                        SEND_ANSWER_TO_TASK_OWNER_MESSAGE,
                        SEND_ANSWER_MESSAGE,
-                       REQUIRED_ANSWER_FOR_TASK_MESSAGE,
+                       DEFINE_TASK_REQUIRED_ANSWER_MESSAGE,
                        SEND_TASK_TO_ALL_USER_MESSAGE,
                        DEFINE_HEART_FOR_TASK_MESSAGE,
                        REASON_OF_REJECT_MESSAGE
                        )
-from .tools import split_name_and_phone_number, inline_keyboard_button_for_get_confirmation
+from .tools import find_phone_number_in_message, inline_keyboard_button_for_get_confirmation
 
 
 async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -39,10 +39,15 @@ async def register_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             context.user_data['full_name'] = update.message.text
             await context.bot.send_message(chat_id=chat_id, text=ASK_PHONE_NUMBER_IN_REGISTRATION_MESSAGE)
         elif not phone_number:
-            context.user_data['phone_number'] = update.message.text
-            # connect to database
-            await context.bot.send_message(chat_id=chat_id, text=SUCCESS_REGISTRATION_MESSAGE)
-            context.user_data.clear()
+            phone_number = update.message.text
+            phone_number = find_phone_number_in_message(phone_number)
+            if phone_number:
+                context.user_data['phone_number'] = phone_number
+                # connect to database
+                await context.bot.send_message(chat_id=chat_id, text=SUCCESS_REGISTRATION_MESSAGE)
+                context.user_data.clear()
+            else:
+                await context.bot.send_message(chat_id=chat_id, text=ASK_PHONE_NUMBER_IN_REGISTRATION_MESSAGE)
     else:
         context.user_data['command'] = 'register'
         await context.bot.send_message(chat_id=chat_id, text=ASK_FULL_NAME_IN_REGISTRATION_MESSAGE)
@@ -91,7 +96,7 @@ async def task_handler(update: Update, context:ContextTypes.DEFAULT_TYPE) -> Non
             try:
                 context.user_data['heart'] = int(update.message.text)
                 # connect to database get user hearts
-                await context.bot.send_message(chat_id=chat_id, text=REQUIRED_ANSWER_FOR_TASK_MESSAGE)
+                await context.bot.send_message(chat_id=chat_id, text=DEFINE_TASK_REQUIRED_ANSWER_MESSAGE)
             except:
                 await context.bot.send_message(chat_id=chat_id, text=DEFINE_HEART_FOR_TASK_MESSAGE)
         elif not required_answer:
@@ -102,7 +107,7 @@ async def task_handler(update: Update, context:ContextTypes.DEFAULT_TYPE) -> Non
                 await context.bot.send_message(chat_id=chat_id, text=SEND_TASK_TO_ALL_USER_MESSAGE)
                 context.user_data.clear()
             except:
-                await context.bot.send_message(chat_id=chat_id, text=REQUIRED_ANSWER_FOR_TASK_MESSAGE)
+                await context.bot.send_message(chat_id=chat_id, text=DEFINE_TASK_REQUIRED_ANSWER_MESSAGE)
     else:
         context.user_data['command'] = 'task'
         await context.bot.send_message(chat_id=chat_id, text=SEND_TASK_MESSAGE)
